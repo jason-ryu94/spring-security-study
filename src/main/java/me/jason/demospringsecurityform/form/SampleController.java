@@ -25,13 +25,13 @@ public class SampleController {
         return "info";
     }
 
-    @GetMapping("/")
+    @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
         model.addAttribute("message", "Hello " +principal.getName());
         return "dashboard";
     }
 
-    @GetMapping("/")
+    @GetMapping("/admin")
     public String admin(Model model, Principal principal) {
         model.addAttribute("message", "Hello Admin" + principal.getName());
         return "admin";
