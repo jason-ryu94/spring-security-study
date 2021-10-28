@@ -15,6 +15,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     AccountService accountService;
 
+    // securityConfig가 하나의 필터 역할을 한다.
+    // antMatchers 가 체인을 만드는 역할을 한다.
+    // @Order 를 통해 순서를 줄 수 있다.
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 요청에 대한 인가 설정
