@@ -14,6 +14,7 @@ public class SampleService {
 
     public void dashboard() {
         // AccountContext에 들어있는 것을 사용할 수 있다.
+        // 아래의 SecurityContextHolder가 ThreadLocal 을 사용해서 같은 인스턴스를 사용하는 방법이다.
         Account account = AccountContext.getAccount();
         System.out.println("==================");
         System.out.println("account = " + account);
