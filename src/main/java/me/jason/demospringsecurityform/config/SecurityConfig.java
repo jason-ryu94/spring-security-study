@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // securityConfig가 하나의 필터 역할을 한다.
     // antMatchers 가 체인을 만드는 역할을 한다.
     // @Order 를 통해 순서를 줄 수 있다.
+    // filterChainProxy까지 들어오는 과정에 대한 부분
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
