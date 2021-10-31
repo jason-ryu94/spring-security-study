@@ -20,6 +20,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // @Order 를 통해 순서를 줄 수 있다.
     // filterChainProxy까지 들어오는 과정에 대한 부분
 
+    // 처음 요청이 들어오면 servletContainer가 잡는다.
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 요청에 대한 인가 설정
