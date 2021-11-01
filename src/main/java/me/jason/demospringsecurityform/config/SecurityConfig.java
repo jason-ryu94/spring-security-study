@@ -3,10 +3,20 @@ package me.jason.demospringsecurityform.config;
 import me.jason.demospringsecurityform.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -31,12 +41,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      *
      * */
 
+    /**
+     * role의 hirerachy 를 지정하기 위한 방법
+     */
+    public AccessDecisionManager accessDecisionManager() {
+
+        // 롤의 계층을 설정해주는 것
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+
+        DefaultWebSecurityExpressionHandler handler = new DefaultWebSecurityExpressionHandler();
+        handler.setRoleHierarchy(roleHierarchy);
+
+
+        /**
+         * accessDecisionManager를 커스텀하는 방식이고,
+         * ExpressionHandler를 커스텀하는 방식은 아래의 과정이 필요없다.
+         * configure에 .expressionHandler를 넣어주면된다.
+         * voter가 사용하는 핸들러만 커스텀 해준 것이다.
+         */
+        WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
+        webExpressionVoter.setExpressionHandler(handler);
+
+        List<AccessDecisionVoter<? extends Object>> voters = Arrays.asList(webExpressionVoter);
+
+        return new AffirmativeBased(voters);
+
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 요청에 대한 인가 설정
         http.authorizeRequests()
                 .mvcMatchers("/", "/info", "/account/**").permitAll()
                 .mvcMatchers("/admin").hasRole("ADMIN")
+                .mvcMatchers("/user").hasRole("USER")
+                .accessDecisionManager(accessDecisionManager())
                 .anyRequest().authenticated();
 
         // 로그인 폼을 사용하겠다.
