@@ -22,6 +22,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 처음 요청이 들어오면 servletContainer가 잡는다.
 
+    /**
+     * 서블릿필터 처리를 스프링에 있는 빈으로 위임하고 싶을 때 사용하는 서블릿 필터
+     * 스프링 부트는 자동으로 등록된다.
+     * 스프링 부트 없이는 AbstractSecurityWebApplicationInitializer 를 사용해서 등록
+     *
+     * 권한 사용을 담당하는 부분은 : AccessDecisionManager(인가)
+     *
+     * */
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
